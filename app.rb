@@ -1,5 +1,3 @@
-require_relative 'services/time_converter'
-
 class App
   def call(env)
     [status, headers, body]
@@ -16,6 +14,6 @@ class App
   end
 
   def body
-    ['Welcome aborted!']
+    ['App']
   end
 end
