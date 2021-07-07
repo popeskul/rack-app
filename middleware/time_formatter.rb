@@ -9,22 +9,21 @@ class TimeFormatter
   end
 
   def call(env)
-    @request = Rack::Request.new(env)
-    @request_params = @request.params['format']
+    request = Rack::Request.new(env)
+    request_params = request.params['format']
 
-    if @request.path == TIME_URL
-      handle_time_request
-    elsif @request_params.nil?
-      final_response(STATUS[:error], headers, ["Unknown time format\n"])
+    if request.path != TIME_URL
+      body = request_params.nil? ? ["Unknown time format\n"] : ["Bad url\n"]
+      final_response(STATUS[:error], headers, body)
     else
-      final_response(STATUS[:error], headers, ["Bad url\n"])
+      handle_time_request(request_params)
     end
   end
 
   private
 
-  def handle_time_request
-    user_format = @request_params.split(',')
+  def handle_time_request(request_params)
+    user_format = request_params.split(',')
     time_formatter = TimeConverter.new(user_format)
 
     if time_formatter.valid_params?
