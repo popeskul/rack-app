@@ -1,8 +1,8 @@
 require_relative '../services/time_converter'
 
 class TimeFormatter
-  STATUS = { error: 404, success: 200 }
-  TIME_URL = '/time'
+  STATUS = { error: 404, success: 200 }.freeze
+  TIME_URL = '/time'.freeze
 
   def initialize(app)
     @app = app
@@ -24,13 +24,13 @@ class TimeFormatter
   private
 
   def handle_time_request
-    user_format = @request_params.split(",")
+    user_format = @request_params.split(',')
     time_formatter = TimeConverter.new(user_format)
 
-    if time_formatter.acceptably?
-      final_response(STATUS[:success], headers, "#{time_formatter.return_time}\n")
+    if time_formatter.valid_params?
+      final_response(STATUS[:success], headers, "#{time_formatter.call}\n")
     else
-      final_response(STATUS[:error], headers, "#{time_formatter.return_time}\n")
+      final_response(STATUS[:error], headers, "#{time_formatter.call}\n")
     end
   end
 
@@ -40,6 +40,6 @@ class TimeFormatter
   end
 
   def headers
-    {"Content-type"=>"text-plain"}
+    { 'Content-type' => 'text-plain' }
   end
 end
