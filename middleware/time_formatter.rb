@@ -28,9 +28,9 @@ class TimeFormatter
     time_formatter = TimeConverter.new(user_format)
     time_formatter.call
     if time_formatter.success?
-      final_response(STATUS[:success], headers, "#{time_formatter.time_string}\n")
+      final_response(STATUS[:success], headers, "#{time_formatter.valid_formats}\n")
     else
-      final_response(STATUS[:error], headers, "#{time_formatter.invalid_string}\n")
+      final_response(STATUS[:error], headers, "#{time_formatter.wrong_formats}\n")
     end
   end
 
