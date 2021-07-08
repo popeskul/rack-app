@@ -4,24 +4,28 @@ class TimeConverter
     'hour' => '%H', 'minute' => '%m', 'second' => '%S'
   }.freeze
 
+  attr_reader :time_string, :invalid_string
+
   def initialize(array)
     @format = array
   end
 
   def call
-    if valid_params?
+    if success?
       full_date = @format.reduce([]) { |acc, param| acc << ACCEPTABLE_FORMAT[param] }.join('-')
-      Time.now.strftime(full_date)
+      @time_string = Time.now.strftime(full_date)
     else
-      invalid_params
+      @invalid_string = invalid_params
     end
   end
 
-  def invalid_params
-    @format - ACCEPTABLE_FORMAT.keys
+  def success?
+    invalid_params.empty?
   end
 
-  def valid_params?
-    invalid_params.empty?
+  private
+
+  def invalid_params
+    @format - ACCEPTABLE_FORMAT.keys
   end
 end

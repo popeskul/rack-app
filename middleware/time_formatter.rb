@@ -24,12 +24,13 @@ class TimeFormatter
 
   def handle_time_request(request_params)
     user_format = request_params.split(',')
-    time_formatter = TimeConverter.new(user_format)
 
-    if time_formatter.valid_params?
-      final_response(STATUS[:success], headers, "#{time_formatter.call}\n")
+    time_formatter = TimeConverter.new(user_format)
+    time_formatter.call
+    if time_formatter.success?
+      final_response(STATUS[:success], headers, "#{time_formatter.time_string}\n")
     else
-      final_response(STATUS[:error], headers, "#{time_formatter.call}\n")
+      final_response(STATUS[:error], headers, "#{time_formatter.invalid_string}\n")
     end
   end
 
